@@ -23,12 +23,15 @@ namespace PhoneBookWebApp.Models
         public int PinCode { get; set; }
         [Required]
         [Display(Name = "Country")]
+     
         public int CountryId { get; set; }
         [Required]
         [Display(Name = "State")]
+  
         public int StateId { get; set; }
         [Required]
         [Display(Name = "City")]
+ 
         public int CityId { get; set; }
         [Required]
         [Display(Name = "Person")]
