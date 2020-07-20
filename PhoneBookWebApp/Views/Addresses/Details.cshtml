@@ -1,0 +1,74 @@
+﻿@model PhoneBookWebApp.Models.Address
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Address</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.City.CityName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.City.CityName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Country.CountryName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Country.CountryName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.People.FirstName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.People.FirstName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.State.StateName)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.State.StateName)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressOne)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AddressOne)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AddressTwo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AddressTwo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PinCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PinCode)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
