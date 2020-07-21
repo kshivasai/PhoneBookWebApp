@@ -40,7 +40,7 @@ namespace PhoneBookWebApp.Controllers
         // GET: Cities/Create
         public ActionResult Create()
         {
-            ViewBag.StateId = new SelectList(db.States, "ID", "StateName");
+            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName");
             return View();
         }
 
@@ -49,7 +49,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,CityName,IsActive,StateId")] City city)
+        public ActionResult Create([Bind(Include = "CityId,CityName,IsActive,StateId")] City city)
         {
             if (ModelState.IsValid)
             {
@@ -58,7 +58,7 @@ namespace PhoneBookWebApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.StateId = new SelectList(db.States, "ID", "StateName", city.StateId);
+            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", city.StateId);
             return View(city);
         }
 
@@ -74,7 +74,7 @@ namespace PhoneBookWebApp.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.StateId = new SelectList(db.States, "ID", "StateName", city.StateId);
+            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", city.StateId);
             return View(city);
         }
 
@@ -83,7 +83,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,CityName,IsActive,StateId")] City city)
+        public ActionResult Edit([Bind(Include = "CityId,CityName,IsActive,StateId")] City city)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace PhoneBookWebApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.StateId = new SelectList(db.States, "ID", "StateName", city.StateId);
+            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", city.StateId);
             return View(city);
         }
 

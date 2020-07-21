@@ -15,10 +15,23 @@ namespace PhoneBookWebApp.Controllers
     {
         private PhoneBookContext db = new PhoneBookContext();
 
+
         // GET: People
-        public ActionResult Index()
+        public ActionResult Index(String searchString)
         {
-            return View(db.Peoples.ToList());
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                var people = db.Peoples.Where(p => p.FirstName.Contains(searchString) ||
+                                                   p.LastName.Contains(searchString) ||
+                                                   p.Country.CountryName.Contains(searchString) ||
+                                                   p.State.StateName.Contains(searchString) ||
+                                                   p.City.CityName.Contains(searchString) ||
+                                                   p.Email.Contains(searchString) ||
+                                                   p.PhoneNumber.Contains(searchString));
+                return View(people.ToList());
+            }
+            var peoples = db.Peoples.Include(p => p.City).Include(p => p.Country).Include(p => p.State);
+            return View(peoples.ToList());
         }
 
         // GET: People/Details/5
@@ -39,6 +52,9 @@ namespace PhoneBookWebApp.Controllers
         // GET: People/Create
         public ActionResult Create()
         {
+            ViewBag.CityId = new SelectList(db.Cities, "CityId", "CityName");
+            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName");
+            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName");
             return View();
         }
 
@@ -47,7 +63,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,FirstName,LastName,PhoneNumber,Email,IsActive")] People people)
+        public ActionResult Create([Bind(Include = "ID,FirstName,LastName,PhoneNumber,Email,AddressOne,AddressTwo,PinCode,IsActive,CountryId,StateId,CityId")] People people)
         {
             if (ModelState.IsValid)
             {
@@ -56,6 +72,9 @@ namespace PhoneBookWebApp.Controllers
                 return RedirectToAction("Index");
             }
 
+            ViewBag.CityId = new SelectList(db.Cities, "CityId", "CityName", people.CityId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", people.CountryId);
+            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", people.StateId);
             return View(people);
         }
 
@@ -71,6 +90,9 @@ namespace PhoneBookWebApp.Controllers
             {
                 return HttpNotFound();
             }
+            ViewBag.CityId = new SelectList(db.Cities, "CityId", "CityName", people.CityId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", people.CountryId);
+            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", people.StateId);
             return View(people);
         }
 
@@ -79,7 +101,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,FirstName,LastName,PhoneNumber,Email,IsActive")] People people)
+        public ActionResult Edit([Bind(Include = "ID,FirstName,LastName,PhoneNumber,Email,AddressOne,AddressTwo,PinCode,IsActive,CountryId,StateId,CityId")] People people)
         {
             if (ModelState.IsValid)
             {
@@ -87,6 +109,9 @@ namespace PhoneBookWebApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
+            ViewBag.CityId = new SelectList(db.Cities, "CityId", "CityName", people.CityId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", people.CountryId);
+            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", people.StateId);
             return View(people);
         }
 

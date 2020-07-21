@@ -127,7 +127,6 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Controllers\AddressesController.cs" />
     <Compile Include="Controllers\CitiesController.cs" />
     <Compile Include="Controllers\CountriesController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -137,7 +136,6 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\Address.cs" />
     <Compile Include="Models\City.cs" />
     <Compile Include="Models\Country.cs" />
     <Compile Include="Models\People.cs" />
@@ -185,11 +183,6 @@
     <Content Include="Views\People\Details.cshtml" />
     <Content Include="Views\People\Edit.cshtml" />
     <Content Include="Views\People\Index.cshtml" />
-    <Content Include="Views\Addresses\Create.cshtml" />
-    <Content Include="Views\Addresses\Delete.cshtml" />
-    <Content Include="Views\Addresses\Details.cshtml" />
-    <Content Include="Views\Addresses\Edit.cshtml" />
-    <Content Include="Views\Addresses\Index.cshtml" />
     <Content Include="Views\Countries\Create.cshtml" />
     <Content Include="Views\Countries\Delete.cshtml" />
     <Content Include="Views\Countries\Details.cshtml" />

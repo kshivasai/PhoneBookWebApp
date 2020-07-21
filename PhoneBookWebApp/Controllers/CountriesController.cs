@@ -47,7 +47,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,CountryName,IsActive")] Country country)
+        public ActionResult Create([Bind(Include = "CuntryId,CountryName,IsActive")] Country country)
         {
             if (ModelState.IsValid)
             {
@@ -79,7 +79,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,CountryName,IsActive")] Country country)
+        public ActionResult Edit([Bind(Include = "CuntryId,CountryName,IsActive")] Country country)
         {
             if (ModelState.IsValid)
             {

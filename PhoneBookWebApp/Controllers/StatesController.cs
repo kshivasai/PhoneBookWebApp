@@ -40,7 +40,7 @@ namespace PhoneBookWebApp.Controllers
         // GET: States/Create
         public ActionResult Create()
         {
-            ViewBag.CountryId = new SelectList(db.Countries, "ID", "CountryName");
+            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName");
             return View();
         }
 
@@ -49,7 +49,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,StateName,IsActive,CountryId")] State state)
+        public ActionResult Create([Bind(Include = "SateId,StateName,IsActive,CountryId")] State state)
         {
             if (ModelState.IsValid)
             {
@@ -58,7 +58,7 @@ namespace PhoneBookWebApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CountryId = new SelectList(db.Countries, "ID", "CountryName", state.CountryId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", state.CountryId);
             return View(state);
         }
 
@@ -74,7 +74,7 @@ namespace PhoneBookWebApp.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.CountryId = new SelectList(db.Countries, "ID", "CountryName", state.CountryId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", state.CountryId);
             return View(state);
         }
 
@@ -83,7 +83,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,StateName,IsActive,CountryId")] State state)
+        public ActionResult Edit([Bind(Include = "SateId,StateName,IsActive,CountryId")] State state)
         {
             if (ModelState.IsValid)
             {
@@ -91,7 +91,7 @@ namespace PhoneBookWebApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CountryId = new SelectList(db.Countries, "ID", "CountryName", state.CountryId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", state.CountryId);
             return View(state);
         }
 

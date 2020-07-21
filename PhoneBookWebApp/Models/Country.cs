@@ -1,24 +1,26 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Web;
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
 
 namespace PhoneBookWebApp.Models
 {
     public class Country
     {
-        public int ID { get; set; }
+        [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+        [Key]
+        [Column(Order = 1)]
+        public int CuntryId { get; set; }
+
+        [Display(Name = "Country Name")]
         [Required]
-        [DisplayName ( "Country")]
-        public string CountryName { get; set; }
+        public String CountryName { get; set; }
 
         public bool IsActive { get; set; } = true;
-        public virtual ICollection<Address> Addresses { get; set; }
-        public virtual ICollection<State> States { get; set; }
-      
-    }
 
+        public virtual ICollection<State> States { get; set; }
+    }
 }
