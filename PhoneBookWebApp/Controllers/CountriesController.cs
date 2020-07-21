@@ -18,6 +18,7 @@ namespace PhoneBookWebApp.Controllers
         // GET: Countries
         public ActionResult Index()
         {
+            var countries = db.Countries.Where(c => c.IsActive.Equals(true));
             return View(db.Countries.ToList());
         }
 

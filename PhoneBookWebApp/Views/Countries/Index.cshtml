@@ -14,9 +14,6 @@
         <th>
             @Html.DisplayNameFor(model => model.CountryName)
         </th>
-        <th>
-            @Html.DisplayNameFor(model => model.IsActive)
-        </th>
         <th></th>
     </tr>
 
@@ -24,9 +21,6 @@
     <tr>
         <td>
             @Html.DisplayFor(modelItem => item.CountryName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsActive)
         </td>
         <td>
             @Html.ActionLink("Edit", "Edit", new { id=item.CuntryId }) |

@@ -31,7 +31,7 @@ namespace PhoneBookWebApp.Models
         public String PhoneNumber { get; set; }
 
         [Display(Name = "Email")]
-        [Required]
+        [Required(ErrorMessage ="Email field is Requried")]
         [EmailAddress]
         public String Email { get; set; }
 

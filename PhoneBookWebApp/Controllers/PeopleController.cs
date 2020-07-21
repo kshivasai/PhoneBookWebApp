@@ -28,9 +28,11 @@ namespace PhoneBookWebApp.Controllers
                                                    p.City.CityName.Contains(searchString) ||
                                                    p.Email.Contains(searchString) ||
                                                    p.PhoneNumber.Contains(searchString));
+                people = people.Where(p => p.IsActive.Equals(true));
                 return View(people.ToList());
             }
             var peoples = db.Peoples.Include(p => p.City).Include(p => p.Country).Include(p => p.State);
+            peoples = peoples.Where(p => p.IsActive.Equals(true));
             return View(peoples.ToList());
         }
 
