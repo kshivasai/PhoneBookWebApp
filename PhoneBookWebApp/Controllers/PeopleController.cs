@@ -21,14 +21,14 @@ namespace PhoneBookWebApp.Controllers
         {
             if (!String.IsNullOrEmpty(searchString))
             {
-                var people = db.Peoples.Where(p => p.FirstName.Contains(searchString) ||
+                var people = db.Peoples.Where(p => (p.FirstName.Contains(searchString) ||
                                                    p.LastName.Contains(searchString) ||
                                                    p.Country.CountryName.Contains(searchString) ||
                                                    p.State.StateName.Contains(searchString) ||
                                                    p.City.CityName.Contains(searchString) ||
                                                    p.Email.Contains(searchString) ||
-                                                   p.PhoneNumber.Contains(searchString));
-                people = people.Where(p => p.IsActive.Equals(true));
+                                                   p.PhoneNumber.Contains(searchString)) &&
+                                                   p.IsActive);
                 return View(people.ToList());
             }
             var peoples = db.Peoples.Include(p => p.City).Include(p => p.Country).Include(p => p.State);
@@ -54,9 +54,17 @@ namespace PhoneBookWebApp.Controllers
         // GET: People/Create
         public ActionResult Create()
         {
-            ViewBag.CityId = new SelectList(db.Cities, "CityId", "CityName");
-            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName");
-            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName");
+            var country = db.Countries.Where(c => c.IsActive).ToList();
+            List<SelectListItem> co = new List<SelectListItem>();
+            foreach (var c in country)
+            {
+                co.Add(new SelectListItem
+                {
+                    Text = c.CountryName,
+                    Value = c.CuntryId.ToString()
+                });
+                ViewBag.country = co;
+            }
             return View();
         }
 
@@ -73,11 +81,37 @@ namespace PhoneBookWebApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.CityId = new SelectList(db.Cities, "CityId", "CityName", people.CityId);
-            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", people.CountryId);
-            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", people.StateId);
             return View(people);
+        }
+        public JsonResult GetStates(int id)
+        {
+            var states = db.States.Where(s => s.CountryId == id && s.IsActive).ToList();
+            List<SelectListItem> listates = new List<SelectListItem>();
+            listates.Add(new SelectListItem { Text = "--Select State--", Value = "0" });
+            if (states != null)
+            {
+                foreach (var s in states)
+                {
+                    listates.Add(new SelectListItem { Text = s.StateName, Value = s.SateId.ToString() });
+                }
+            }
+            return Json(new SelectList(listates, "Value", "Text", JsonRequestBehavior.AllowGet));
+        }
+        public JsonResult GetCities(int id)
+        {
+            var cities = db.Cities.Where(c => c.StateId == id && c.IsActive).ToList();
+            List<SelectListItem> licity = new List<SelectListItem>();
+            licity.Add(new SelectListItem { Text = "--Select City--", Value = "0" });
+            if (cities != null)
+            {
+                foreach (var c in cities)
+                {
+                    licity.Add(new SelectListItem { Text = c.CityName, Value = c.CityId.ToString() });
+                }
+
+            }
+
+            return Json(new SelectList(licity, "Value", "Text", JsonRequestBehavior.AllowGet));
         }
 
         // GET: People/Edit/5
@@ -90,7 +124,7 @@ namespace PhoneBookWebApp.Controllers
             People people = db.Peoples.Find(id);
             if (people == null)
             {
-                return HttpNotFound();
+                return View("Error");
             }
             ViewBag.CityId = new SelectList(db.Cities, "CityId", "CityName", people.CityId);
             ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", people.CountryId);

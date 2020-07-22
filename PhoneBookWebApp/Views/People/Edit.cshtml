@@ -6,11 +6,69 @@
 
 <h2>Edit</h2>
 
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+<script src="~/Scripts/jquery-3.3.1.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#CountryId").change(function () {
+            $("#StateId").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetStates")',
+
+                dataType: 'json',
+
+                data: { id: $("#CountryId").val() },
+
+                success: function (states) {
+                    $.each(states, function (i, state) {
+                    $("#StateId").append('<option value="' + state.Value + '">' +
+                         state.Text + '</option>');
+
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+</script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#StateId").change(function () {
+            $("#CityId").empty();
+            $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetCities")',
+                dataType: 'json',
+                data: { id: $("#StateId").val() },
+                success: function (citys) {
+                    $.each(citys, function (i, city) {
+                        $("#CityId").append('<option value="'
+                                                + city.Value + '">'
+                                                + city.Text + '</option>');
+                    });
+                },
+                error: function (ex) {
+                    alert('Failed to retrieve states.' + ex);
+                }
+            });
+            return false;
+        })
+    });
+</script>
+
 
 @using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>People</h4>
         <hr />
