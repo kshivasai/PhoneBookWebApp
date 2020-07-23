@@ -9,6 +9,7 @@ namespace PhoneBookWebApp
 {
     public class RouteConfig
     {
+       
         public static void RegisterRoutes(RouteCollection routes)
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
@@ -18,6 +19,7 @@ namespace PhoneBookWebApp
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "People", action = "Index", id = UrlParameter.Optional }
             );
+
         }
     }
 }

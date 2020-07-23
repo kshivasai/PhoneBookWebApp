@@ -28,12 +28,14 @@ namespace PhoneBookWebApp.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Error = "Error processing your request Check Your Url .Please try again!";
+                return View("Error");
             }
             State state = db.States.Find(id);
             if (state == null)
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
             return View(state);
         }
@@ -41,7 +43,7 @@ namespace PhoneBookWebApp.Controllers
         // GET: States/Create
         public ActionResult Create()
         {
-            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName");
+            ViewBag.CountryId = new SelectList(db.Countries, "CountryId", "CountryName");
             return View();
         }
 
@@ -50,7 +52,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "SateId,StateName,IsActive,CountryId")] State state)
+        public ActionResult Create([Bind(Include = "StateId,StateName,IsActive,CountryId")] State state)
         {
             if (ModelState.IsValid)
             {
@@ -59,7 +61,7 @@ namespace PhoneBookWebApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", state.CountryId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CountryId", "CountryName", state.CountryId);
             return View(state);
         }
 
@@ -68,14 +70,16 @@ namespace PhoneBookWebApp.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Error = "Error processing your request Check Your Url .Please try again!";
+                return View("Error");
             }
             State state = db.States.Find(id);
             if (state == null)
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
-            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", state.CountryId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CountryId", "CountryName", state.CountryId);
             return View(state);
         }
 
@@ -84,7 +88,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "SateId,StateName,IsActive,CountryId")] State state)
+        public ActionResult Edit([Bind(Include = "StateId,StateName,IsActive,CountryId")] State state)
         {
             if (ModelState.IsValid)
             {
@@ -92,21 +96,24 @@ namespace PhoneBookWebApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", state.CountryId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CountryId", "CountryName", state.CountryId);
             return View(state);
         }
 
         // GET: States/Delete/5
         public ActionResult Delete(int? id)
         {
+
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Error = "Error processing your request .Please try again!";
+                return View("Error");
             }
             State state = db.States.Find(id);
             if (state == null)
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
             return View(state);
         }
@@ -116,10 +123,19 @@ namespace PhoneBookWebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            State state = db.States.Find(id);
-            db.States.Remove(state);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            List<People> people = db.Peoples.Where(p => p.StateId == id).ToList();
+            if (people.Count > 0)
+            {
+                ViewBag.Error = "Cannot delete this State because this country is used in people";
+                return View("Error");
+            }
+            else
+            {
+                State state = db.States.Find(id);
+                db.States.Remove(state);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
         }
 
         protected override void Dispose(bool disposing)

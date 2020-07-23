@@ -13,7 +13,7 @@ namespace PhoneBookWebApp.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         [Key]
         [Column(Order = 1)]
-        public int SateId { get; set; }
+        public int StateId { get; set; }
 
         [Display(Name = "State Name")]
         [Required]

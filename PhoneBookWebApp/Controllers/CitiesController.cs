@@ -28,12 +28,14 @@ namespace PhoneBookWebApp.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Error = "Error processing your request Check Your Url .Please try again!";
+                return View("Error");
             }
             City city = db.Cities.Find(id);
             if (city == null)
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
             return View(city);
         }
@@ -41,7 +43,7 @@ namespace PhoneBookWebApp.Controllers
         // GET: Cities/Create
         public ActionResult Create()
         {
-            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName");
+            ViewBag.StateId = new SelectList(db.States, "StateId", "StateName");
             return View();
         }
 
@@ -59,7 +61,7 @@ namespace PhoneBookWebApp.Controllers
                 return RedirectToAction("Index");
             }
 
-            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", city.StateId);
+            ViewBag.StateId = new SelectList(db.States, "StateId", "StateName", city.StateId);
             return View(city);
         }
 
@@ -68,14 +70,16 @@ namespace PhoneBookWebApp.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Error = "Error processing your request Check Your Url .Please try again!";
+                return View("Error");
             }
             City city = db.Cities.Find(id);
             if (city == null)
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
-            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", city.StateId);
+            ViewBag.StateId = new SelectList(db.States, "StateId", "StateName", city.StateId);
             return View(city);
         }
 
@@ -92,7 +96,7 @@ namespace PhoneBookWebApp.Controllers
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", city.StateId);
+            ViewBag.StateId = new SelectList(db.States, "StateId", "StateName", city.StateId);
             return View(city);
         }
 
@@ -101,12 +105,14 @@ namespace PhoneBookWebApp.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Error = "Error processing your request .Please try again!";
+                return View("Error");
             }
             City city = db.Cities.Find(id);
             if (city == null)
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
             return View(city);
         }
@@ -116,10 +122,21 @@ namespace PhoneBookWebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            City city = db.Cities.Find(id);
-            db.Cities.Remove(city);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            List<People> people = db.Peoples.Where(p => p.CityId == id).ToList();
+            if (people.Count > 0)
+            {
+                ViewBag.Error = "Cannot delete this City because this country is used in people";
+                return View("Error");
+            }
+            else
+            {
+                City city = db.Cities.Find(id);
+                db.Cities.Remove(city);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+
+            }
+               
         }
 
         protected override void Dispose(bool disposing)

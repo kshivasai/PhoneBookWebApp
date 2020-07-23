@@ -18,8 +18,8 @@ namespace PhoneBookWebApp.Controllers
         // GET: Countries
         public ActionResult Index()
         {
-            var countries = db.Countries.Where(c => c.IsActive.Equals(true));
-            return View(db.Countries.ToList());
+            var countries = db.Countries.Where(c => c.IsActive).ToList();
+            return View(countries);
         }
 
         // GET: Countries/Details/5
@@ -30,9 +30,11 @@ namespace PhoneBookWebApp.Controllers
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
             Country country = db.Countries.Find(id);
-            if (country == null)
+           
+            if (country == null || country.IsActive.Equals(false))
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
             return View(country);
         }
@@ -48,10 +50,11 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "CuntryId,CountryName,IsActive")] Country country)
+        public ActionResult Create([Bind(Include = "CountryId,CountryName,IsActive")] Country country)
         {
             if (ModelState.IsValid)
             {
+               
                 db.Countries.Add(country);
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -65,12 +68,14 @@ namespace PhoneBookWebApp.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Error = "Error processing your request Check Your Url .Please try again!";
+                return View("Error");
             }
             Country country = db.Countries.Find(id);
-            if (country == null)
+            if (country == null || country.IsActive.Equals(false))
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
             return View(country);
         }
@@ -80,7 +85,7 @@ namespace PhoneBookWebApp.Controllers
         // more details see https://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "CuntryId,CountryName,IsActive")] Country country)
+        public ActionResult Edit([Bind(Include = "CountryId,CountryName,IsActive")] Country country)
         {
             if (ModelState.IsValid)
             {
@@ -96,12 +101,14 @@ namespace PhoneBookWebApp.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Error = "Error processing your request Check Your Url .Please try again!";
+                return View("Error");
             }
             Country country = db.Countries.Find(id);
-            if (country == null)
+            if (country == null || country.IsActive.Equals(false))
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
             return View(country);
         }
@@ -111,10 +118,20 @@ namespace PhoneBookWebApp.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
-            Country country = db.Countries.Find(id);
-            db.Countries.Remove(country);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            List<People> people = db.Peoples.Where(p => p.CountryId == id).ToList();
+            if(people.Count>0)
+            {
+                ViewBag.Error = "Cannot delete this country because this country is used in people";
+                return View("Error");
+            }
+            else
+            {
+                Country country = db.Countries.Find(id);
+                db.Countries.Remove(country);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            
         }
 
         protected override void Dispose(bool disposing)

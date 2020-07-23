@@ -55,6 +55,7 @@ namespace PhoneBookWebApp.Models
 
         [Required]
         [ForeignKey("State")]
+        
         public int StateId { get; set; }
 
         [Required]

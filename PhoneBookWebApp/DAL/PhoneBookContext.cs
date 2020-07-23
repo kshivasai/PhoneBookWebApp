@@ -12,18 +12,20 @@ namespace PhoneBookWebApp.DAL
     {
         public PhoneBookContext() : base("PhoneBookContext")
         {
+            
             //Database.SetInitializer(new MigrateDatabaseToLatestVersion<PhoneBookContext, PhoneBookWebApp.Migrations.Configuration>("PhoneBookContext"));
         }
         public DbSet<People> Peoples { get; set; }
         public DbSet<Country> Countries { get; set; }
         public DbSet<State> States { get; set; }
         public DbSet<City> Cities { get; set; }
-
+        
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Conventions.Remove<PluralizingTableNameConvention>();
             modelBuilder.Conventions.Remove<OneToManyCascadeDeleteConvention>();
-
+            
+            
             modelBuilder.Entity<People>().Map(map =>
             {
                 map.Properties(
@@ -62,6 +64,7 @@ namespace PhoneBookWebApp.DAL
             {
                 foreach (var entry in Changed.Where(e => e.State == EntityState.Deleted))
                 {
+                    
                     entry.State = EntityState.Modified;
                     entry.CurrentValues["IsActive"] = false;
                 }

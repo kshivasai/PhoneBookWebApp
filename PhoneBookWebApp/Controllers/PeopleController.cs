@@ -15,7 +15,7 @@ namespace PhoneBookWebApp.Controllers
     {
         private PhoneBookContext db = new PhoneBookContext();
 
-
+      
         // GET: People
         public ActionResult Index(String searchString)
         {
@@ -32,7 +32,7 @@ namespace PhoneBookWebApp.Controllers
                 return View(people.ToList());
             }
             var peoples = db.Peoples.Include(p => p.City).Include(p => p.Country).Include(p => p.State);
-            peoples = peoples.Where(p => p.IsActive.Equals(true));
+            peoples = peoples.Where(p => p.IsActive);
             return View(peoples.ToList());
         }
 
@@ -41,12 +41,14 @@ namespace PhoneBookWebApp.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Error = "Error processing your request Check Your Url .Please try again!";
+                return View("Error");
             }
             People people = db.Peoples.Find(id);
             if (people == null)
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
             return View(people);
         }
@@ -54,14 +56,14 @@ namespace PhoneBookWebApp.Controllers
         // GET: People/Create
         public ActionResult Create()
         {
-            var country = db.Countries.Where(c => c.IsActive).ToList();
+            List< Country > country= db.Countries.Where(c => c.IsActive).ToList();
             List<SelectListItem> co = new List<SelectListItem>();
-            foreach (var c in country)
+            foreach (var c in country) 
             {
                 co.Add(new SelectListItem
                 {
                     Text = c.CountryName,
-                    Value = c.CuntryId.ToString()
+                    Value = c.CountryId.ToString()
                 });
                 ViewBag.country = co;
             }
@@ -92,7 +94,7 @@ namespace PhoneBookWebApp.Controllers
             {
                 foreach (var s in states)
                 {
-                    listates.Add(new SelectListItem { Text = s.StateName, Value = s.SateId.ToString() });
+                    listates.Add(new SelectListItem { Text = s.StateName, Value = s.StateId.ToString() });
                 }
             }
             return Json(new SelectList(listates, "Value", "Text", JsonRequestBehavior.AllowGet));
@@ -124,11 +126,12 @@ namespace PhoneBookWebApp.Controllers
             People people = db.Peoples.Find(id);
             if (people == null)
             {
+                ViewBag.Error = "Your data Not Found";
                 return View("Error");
             }
             ViewBag.CityId = new SelectList(db.Cities, "CityId", "CityName", people.CityId);
-            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", people.CountryId);
-            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", people.StateId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CountryId", "CountryName", people.CountryId);
+            ViewBag.StateId = new SelectList(db.States, "StateId", "StateName", people.StateId);
             return View(people);
         }
 
@@ -146,8 +149,8 @@ namespace PhoneBookWebApp.Controllers
                 return RedirectToAction("Index");
             }
             ViewBag.CityId = new SelectList(db.Cities, "CityId", "CityName", people.CityId);
-            ViewBag.CountryId = new SelectList(db.Countries, "CuntryId", "CountryName", people.CountryId);
-            ViewBag.StateId = new SelectList(db.States, "SateId", "StateName", people.StateId);
+            ViewBag.CountryId = new SelectList(db.Countries, "CountryId", "CountryName", people.CountryId);
+            ViewBag.StateId = new SelectList(db.States, "StateId", "StateName", people.StateId);
             return View(people);
         }
 
@@ -156,12 +159,14 @@ namespace PhoneBookWebApp.Controllers
         {
             if (id == null)
             {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
+                ViewBag.Error = "Error processing your request Check Your Url .Please try again!";
+                return View("Error");
             }
             People people = db.Peoples.Find(id);
             if (people == null)
             {
-                return HttpNotFound();
+                ViewBag.Error = "Your data Not Found";
+                return View("Error");
             }
             return View(people);
         }
