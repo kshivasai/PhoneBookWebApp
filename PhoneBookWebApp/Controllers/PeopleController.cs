@@ -56,18 +56,27 @@ namespace PhoneBookWebApp.Controllers
         // GET: People/Create
         public ActionResult Create()
         {
-            List< Country > country= db.Countries.Where(c => c.IsActive).ToList();
-            List<SelectListItem> co = new List<SelectListItem>();
-            foreach (var c in country) 
+            List<Country> coun = db.Countries.ToList();
+            if (coun != null)
             {
-                co.Add(new SelectListItem
+                List<Country> country = db.Countries.Where(c => c.IsActive).ToList();
+                List<SelectListItem> co = new List<SelectListItem>();
+                foreach (var c in country)
                 {
-                    Text = c.CountryName,
-                    Value = c.CountryId.ToString()
-                });
-                ViewBag.country = co;
+                    co.Add(new SelectListItem
+                    {
+                        Text = c.CountryName,
+                        Value = c.CountryId.ToString()
+                    });
+                    ViewBag.country = co;
+                }
+                return View();
             }
-            return View();
+            else
+            {
+                ViewBag.Error = "Atleast one country is requried ";
+                return View("Error");
+            }
         }
 
         // POST: People/Create
@@ -181,6 +190,7 @@ namespace PhoneBookWebApp.Controllers
             db.SaveChanges();
             return RedirectToAction("Index");
         }
+       
 
         protected override void Dispose(bool disposing)
         {

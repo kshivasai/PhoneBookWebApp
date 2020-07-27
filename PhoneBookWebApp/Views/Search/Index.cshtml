@@ -1,0 +1,57 @@
+﻿
+@{
+    ViewBag.Title = "Search";
+}
+
+<h2>Search</h2>
+<script src="~/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="~/Scripts/jquery-3.3.1.js"></script>
+@*<script src="js/jquery.min.js" type="text/javascript"></script>
+<script src="js/jquery.dataTables.min.js" type="text/javascript"></script>*@
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#AdvanceSearch").click(function () {
+           $.ajax({
+                type: 'POST',
+                url: '@Url.Action("GetResult")',
+
+                dataType: 'json',
+
+               data: { id: $("#Search option:selected").text() },
+
+               success: function (results) {
+                   debugger
+                   //$.each(peoples, function (i, result) {
+                   console.log(JSON.stringify(results));
+
+                   //});
+                   $(".Output").text(results);
+
+
+                   //$(document).ready(function () {
+                   //    $('#Output').DataTable();
+                   //});
+                },
+                error: function (ex) {
+                    alert('Data not found' + ex);
+                }
+            });
+            return false;
+        });
+    });
+</script>
+
+
+<p>
+    @using (Html.BeginForm())
+    {
+        <div id="form">
+            @Html.DropDownList("Search", ViewBag.Search as SelectList, "Select", htmlAttributes: new { @class = "form-control" })
+            <input type="submit" id="AdvanceSearch" value="Search" />
+        </div>
+    }
+</p>
+<div class="Output">
+   
+</div>
