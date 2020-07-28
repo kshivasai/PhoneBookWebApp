@@ -1,87 +1,267 @@
-﻿using System;
+﻿using Microsoft.Ajax.Utilities;
+using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
+using System.Data.Common;
 using System.Linq;
-using System.Net;
 using System.Web;
+using System.Data.Entity;
 using System.Web.Mvc;
 using PhoneBookWebApp.DAL;
 using PhoneBookWebApp.Models;
+using System.Data;
+using System.Collections;
 
 namespace PhoneBookWebApp.Controllers
 {
     public class SearchController : Controller
     {
-        private PhoneBookContext db =new PhoneBookContext();
+        private PhoneBookContext db = new PhoneBookContext();
+
         // GET: Search
-        
         public ActionResult Index()
         {
-            List<SelectListItem> search = new List<SelectListItem>();
-            search.Add(new SelectListItem { Text = "Select", Value = "0" });
-            search.Add(new SelectListItem { Text = "City", Value = "1" });
-            search.Add(new SelectListItem { Text = "State", Value = "2" });
-            search.Add(new SelectListItem { Text = "Country", Value = "3" });
-            search.Add(new SelectListItem { Text = "Pincode", Value = "4" });
-            ViewBag.Search = search;
+            List<SelectListItem> listGroup = new List<SelectListItem>();
+            listGroup.Add(new SelectListItem { Text = "Email", Value = "Email" });
+            listGroup.Add(new SelectListItem { Text = "Phone", Value = "Phone" });
+            listGroup.Add(new SelectListItem { Text = "State", Value = "State" });
+            listGroup.Add(new SelectListItem { Text = "Country", Value = "Country" });
+            listGroup.Add(new SelectListItem { Text = "City", Value = "City" });
+            List<SelectListItem> listorderGroup = new List<SelectListItem>();
+            listorderGroup.Add(new SelectListItem { Text = "Ascending", Value = "Ascending" });
+            listorderGroup.Add(new SelectListItem { Text = "Descending", Value = "Descending" });
+            ViewBag.listDropDown = listGroup;
+            ViewBag.Counts = 0;
+            ViewBag.order = listorderGroup;
             return View();
         }
-        
-        public JsonResult GetResult(String Id)
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Index(FormCollection group)
         {
-            var results = from p in db.Peoples
-                          group p.FirstName by p.CityId into g
-                          select new
-                          {
-                              CityId = g.Key,
-                              PersonName = g.ToList()
-                          };
+            List<SelectListItem> listGroup = new List<SelectListItem>();
+            listGroup.Add(new SelectListItem { Text = "Email", Value = "Email" });
+            listGroup.Add(new SelectListItem { Text = "Phone", Value = "Phone" });
+            listGroup.Add(new SelectListItem { Text = "State", Value = "State" });
+            listGroup.Add(new SelectListItem { Text = "Country", Value = "Country" });
+            listGroup.Add(new SelectListItem { Text = "City", Value = "City" });
+            List<SelectListItem> listorderGroup = new List<SelectListItem>();
+            listorderGroup.Add(new SelectListItem { Text = "Ascending", Value = "Ascending" });
+            listorderGroup.Add(new SelectListItem { Text = "Descending", Value = "Descending" });
+            ViewBag.listDropDown = listGroup;
+            ViewBag.Counts = 0;
+            ViewBag.order = listorderGroup;
+            if (!String.IsNullOrEmpty(group["selects"]))
+            {
+                ViewBag.SelectedField = group["selects"];
 
+                var start = group["Start"];
+                var nr = group["count"];
+                switch (group["selects"])
+                {
 
-            //var results = from p in db.Peoples
-            //              join c in db.Cities on
-            //               p.CityId equals c.CityId
+                    case "Email":
+                        if (!String.IsNullOrEmpty(group["Start"]))
+                        {
 
-            //              group p.PhoneNumber by p.CityId into g
-            //              select new
-            //              {
-            //                  g.Key,
-            //                  p.LastName,
-            //                  p.PhoneNumber,
-            //                  c.CityName
-            //              };
+                            if (group["order"] == "Ascending")
+                            {
+                                var li = db.Peoples.Where(p => p.IsActive).OrderBy(p => p.Email).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();
+                                ViewBag.Lists = li;
+                                ViewBag.Counts = li.Count();
+                                return View();
+                            }
+                            else
+                            {
+                                var li = db.Peoples.Where(p => p.IsActive).OrderByDescending(p => p.Email).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();
+                                ViewBag.Counts = li.Count();
+                                ViewBag.Lists = li;
+                                return View();
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
 
-            //var results = (from p in db.Peoples
-            //              join c in db.Cities on p.CityId equals c.CityId
+                    case "Phone":
+                        if (!String.IsNullOrEmpty(group["Start"]))
+                        {
 
+                            if (group["order"] == "Ascending")
+                            {
+                                var li = db.Peoples.Where(p => p.IsActive).OrderBy(p => p.PhoneNumber).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();
+                                ViewBag.Lists = li;
+                                ViewBag.Counts = li.Count();
+                                return View();
+                            }
+                            else
+                            {
+                                var li = db.Peoples.Where(p => p.IsActive).OrderByDescending(p => p.PhoneNumber).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();
+                                ViewBag.Lists = li;
+                                ViewBag.Counts = li.Count();
+                                return View();
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    case "State":
+                        if (!String.IsNullOrEmpty(group["Start"]))
+                        {
 
+                            if (group["order"] == "Ascending")
+                            {
+                                var li = db.Peoples.Where(p => p.IsActive).OrderBy(p => p.StateId).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();
+                                ViewBag.Lists = li;
+                                ViewBag.Counts = li.Count();
+                                return View();
+                            }
+                            else
+                            {
+                                var li = db.Peoples.Where(p => p.IsActive).OrderByDescending(p => p.StateId).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();
+                                ViewBag.Lists = li;
+                                ViewBag.Counts = li.Count();
+                                return View();
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
 
-            //              group new { p.FirstName, p.PhoneNumber }
-            //                 by new { p.CityId } into g
-            //              orderby g.Key.CityId
-            //              select new
-            //              {
-            //                  Firstname = g.Select(p=>p.FirstName ),
-            //                  phonenumber=g.Select(p=>p.PhoneNumber)
+                    case "Country":
+                        if (!String.IsNullOrEmpty(group["Start"]))
+                        {
 
-            //              }).ToList();
+                            if (group["order"] == "Ascending")
+                            {
+                                var li = db.Peoples.Where(p => p.IsActive).OrderBy(p => p.CountryId).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();
+                                ViewBag.Lists = li;
+                                ViewBag.Counts = li.Count();
+                                return View();
+                            }
+                            else
+                            {
+                                var li = db.Peoples.Where(p => p.IsActive).OrderByDescending(p => p.CountryId).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();
+                                ViewBag.Counts = li.Count();
+                                ViewBag.Lists = li;
+                                return View();
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                    case "City":
+                        if (!String.IsNullOrEmpty(group["Start"]))
+                        {
 
-            //var results = (from p in db.Peoples
-            //                    group p by p.CityId).ToList();
-            ////iterate each group        
-            //foreach (var ageGroup in results)
-            //{
-            //    Console.WriteLine("Age Group: {0}", ageGroup.Key); //Each group has a key 
+                            if (group["order"] == "Ascending")
+                            {
+                                var li = db.Peoples.Where(p => p.IsActive).OrderBy(p => p.CityId).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();
+                                ViewBag.Counts = li.Count();
+                                ViewBag.Lists = li;
+                                return View();
+                            }
+                            else
+                            {
+                                var li = db.Peoples.Where(p => p.IsActive).OrderByDescending(p => p.CityId).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();
+                                ViewBag.Counts = li.Count();
+                                ViewBag.Lists = li;
+                                return View();
+                            }
+                        }
+                        else
+                        {
+                            break;
+                        }
+                }
+                return RedirectToAction("Index");
+            }
+            return RedirectToAction("Index");
+        }
+        // GET: Search
+        public ActionResult Search()
+        {
 
-            //    foreach (People s in ageGroup) // Each group has inner collection
-            //        Console.WriteLine("Student Name: {0}", s.FirstName);
-            //}
+            List<People> peoples = db.Peoples.ToList();
+
+            List<SelectListItem> listGroup = new List<SelectListItem>();
+            listGroup.Add(new SelectListItem { Text = "City", Value = "City" });
+            listGroup.Add(new SelectListItem { Text = "State", Value = "State" });
+            listGroup.Add(new SelectListItem { Text = "Country", Value = "Country" });
+            listGroup.Add(new SelectListItem { Text = "Pin Code", Value = "Pin Code" });
+
+            ViewBag.listDropDown = listGroup;
+            ViewBag.Count = 0;
+            return View(peoples);
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Search(FormCollection groupByString)
+        {
+            if (!String.IsNullOrEmpty(groupByString["select"]))
+            {
+                List<SelectListItem> listGroup = new List<SelectListItem>();
+                listGroup.Add(new SelectListItem { Text = "City", Value = "City" });
+                listGroup.Add(new SelectListItem { Text = "State", Value = "State" });
+                listGroup.Add(new SelectListItem { Text = "Country", Value = "Country" });
+  
+                ViewBag.listDropDown = listGroup;
+                var list = new List<KeyValuePair<string, int>>();
+                switch (groupByString["select"])
+                {
+                    case "City":
            
+                        var city = db.Peoples.GroupBy(p => p.CityId).ToList();
+                        foreach (var pp in city)
+                        {
+                            var citynames = db.Cities.Where(c => c.CityId.Equals(pp.Key)).Select(p=>p.CityName).ToList();
+                            foreach(var c in citynames)
+                            {
+                                list.Add(new KeyValuePair<string, int>(c.ToString(), pp.Count()));
+                            }
+                        }
+                        ViewBag.list = list;
+                        ViewBag.Count = city.Count();
+                        break;
 
+                    case "State":
 
+                        var state = db.Peoples.GroupBy(p => p.StateId).ToList();
+                        foreach (var pp in state)
+                        {
+                            var statenames = db.States.Where(c => c.StateId.Equals(pp.Key)).Select(p => p.StateName).ToList();
+                            foreach (var c in statenames)
+                            {
+                                list.Add(new KeyValuePair<string, int>(c.ToString(), pp.Count()));
+                            }
+                        }
+                        ViewBag.list = list;
+                        ViewBag.Count = state.Count();
+                        break;
 
-            return Json(results, JsonRequestBehavior.AllowGet);
+                    case "Country":
+
+                        var country = db.Peoples.GroupBy(p => p.CountryId).ToList();
+                        foreach (var pp in country)
+                        {
+                            var countrynames = db.Countries.Where(c => c.CountryId.Equals(pp.Key)).Select(p => p.CountryName).ToList();
+                            foreach (var c in countrynames)
+                            {
+                                list.Add(new KeyValuePair<string, int>(c.ToString(), pp.Count()));
+                            }
+                        }
+                        ViewBag.list = list;
+                        ViewBag.Count = country.Count();
+                        break;
+                }
+                return View();
+            }
+            return RedirectToAction("Search");
         }
     }
 }
+
