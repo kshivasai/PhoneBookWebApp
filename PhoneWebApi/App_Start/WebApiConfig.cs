@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.OData.Builder;
+using System.Web.Http.OData.Extensions;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
+using Phone.DAL;
 
 namespace PhoneWebApi
 {
@@ -27,12 +30,18 @@ namespace PhoneWebApi
 
             //Enable cors
             config.EnableCors();
+            //Odata
+            ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
+            builder.EntitySet<Person>("PeopleOData");
+            builder.EntitySet<Address>("Addresses");
+            config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",
                 routeTemplate: "api/{controller}/{id}",
                 defaults: new { id = RouteParameter.Optional }
             );
+
         }
     }
 }
