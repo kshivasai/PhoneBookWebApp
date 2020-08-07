@@ -15,7 +15,7 @@
         @Html.TextBox("SearchString"):
         <input type="submit" value="Search" />
     </p>
-   
+
 }
 
 <table class="table">
@@ -55,7 +55,7 @@
 
     @foreach (var item in Model)
     {
-        
+
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.City.CityName)
@@ -86,7 +86,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.PinCode)
-            </td>     
+            </td>
             <td>
                 @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
                 @Html.ActionLink("Details", "Details", new { id = item.ID }) |
@@ -96,3 +96,85 @@
     }
 
 </table>
+@*<div>
+
+    <h2>All countries</h2>
+    <ul id="products" />
+
+</div>*@
+<form id="myForm">
+    <label for="CountriesDropdown"><b>All Countries</b></label>
+    <select class="form-control" id="CountriesDropDown" name="CountriesDropDown"></select>
+</form>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+
+@*<script>
+
+    var uri = 'http://localhost:63322/api/Country';
+
+    $(document).ready(function () {
+
+        // Send an AJAX request
+
+        $.getJSON(uri)
+
+            .done(function (data) {
+
+                // On success, 'data' contains a list of products.
+
+                $.each(data, function (key, item) {
+
+                    // Add a list item for the product.
+
+                    $('<li>', { text: item.CountryName }).appendTo($('#myform'));
+
+
+                });
+
+            });
+
+    });*@
+
+    @*//function formatItem(item) {
+
+    //   return item.Name + ': $' + item.Price;
+
+    // }
+
+    //function find() {
+
+    //   var id = $('#prodId').val();
+
+    //   $.getJSON(uri + '/' + id)
+
+    //       .done(function (data) {
+
+    //         $('#product').text(formatItem(data));
+
+    //       })
+
+    //       .fail(function (jqXHR, textStatus, err) {
+
+    //         $('#product').text('Error: ' + err);
+
+    //       });
+
+    // }*@
+
+@*</script>*@
+<script>
+    $(document).ready(function () {
+        $.ajax({
+            type: "GET",
+            url: "http://localhost:63322/api/Country",
+            data: "{}",
+            success: function (data) {
+                var s = '<option value="-1">Please Select a Country</option>';
+                for (var i = 0; i < data.length; i++) {
+                    s += '<option value="' + data[i].CountryId + '">' + data[i].CountryName + '</option>';
+                }
+                $("#CountriesDropDown").html(s);
+            }
+        });
+    });
+</script>

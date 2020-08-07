@@ -63,7 +63,6 @@ namespace PhoneBookWebApp.Controllers
                     case "Email":
                         if (!String.IsNullOrEmpty(group["Start"]))
                         {
-
                             if (group["order"] == "Ascending")
                             {
                                 var li = db.Peoples.Where(p => p.IsActive).OrderBy(p => p.Email).Skip(int.Parse(start) - 1).Take(int.Parse(nr)).ToList();

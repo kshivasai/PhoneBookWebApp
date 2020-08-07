@@ -5,29 +5,128 @@
 }
 
 <h2>Index</h2>
-
 <p>
+
     @Html.ActionLink("Create New", "Create")
+
 </p>
+
 <table class="table">
+
     <tr>
+
         <th>
+
             @Html.DisplayNameFor(model => model.CountryName)
+
         </th>
+
         <th></th>
+
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.CountryName)
-        </td>
-        <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.CountryId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.CountryId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.CountryId })
-        </td>
-    </tr>
-}
+    @foreach (var item in Model)
+    {
+
+        <tr>
+
+            <td>
+
+                @Html.DisplayFor(modelItem => item.CountryName)
+
+            </td>
+
+
+
+
+
+            @*<p>
+                    @Html.ActionLink("Create New", "Create")
+                </p>
+                <table class="table">
+                    <tr>
+                        <th>
+                            CountryName
+                        </th>
+                    </tr>
+
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>
+                                @item.CountryName
+                            </td>*@
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { id = item.CountryId }) |
+                @Html.ActionLink("Details", "Details", new { id = item.CountryId }) |
+                @Html.ActionLink("Delete", "Delete", new { id = item.CountryId })
+            </td>
+        </tr>
+    }
 
 </table>
+
+<div>
+
+    <h2>All countries</h2>
+
+    <ul id="products" />
+
+</div>
+<script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-2.0.3.min.js"></script>
+
+<script>
+
+    var uri = 'http://localhost:63322/api/Country';
+
+    $(document).ready(function () {
+
+       // Send an AJAX request
+
+       $.getJSON(uri)
+
+           .done(function (data) {
+
+             // On success, 'data' contains a list of products.
+
+             $.each(data, function (key, item) {
+
+               // Add a list item for the product.
+
+                 $('<li>', { text: item.CountryName }).appendTo($('#products'));
+
+
+             });
+
+           });
+
+     });
+
+    //function formatItem(item) {
+
+    //   return item.Name + ': $' + item.Price;
+
+    // }
+
+    //function find() {
+
+    //   var id = $('#prodId').val();
+
+    //   $.getJSON(uri + '/' + id)
+
+    //       .done(function (data) {
+
+    //         $('#product').text(formatItem(data));
+
+    //       })
+
+    //       .fail(function (jqXHR, textStatus, err) {
+
+    //         $('#product').text('Error: ' + err);
+
+    //       });
+
+    // }
+
+</script>
+

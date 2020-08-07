@@ -8,18 +8,33 @@ using System.Web;
 using System.Web.Mvc;
 using PhoneBookWebApp.DAL;
 using PhoneBookWebApp.Models;
+using System.Net.Http;
+using System.Threading.Tasks;
 
 namespace PhoneBookWebApp.Controllers
 {
     public class CountriesController : Controller
     {
         private PhoneBookContext db = new PhoneBookContext();
-
+        static readonly HttpClient client = new HttpClient();
         // GET: Countries
-        public ActionResult Index()
+        public async Task<ActionResult> Index()
         {
-            var countries = db.Countries.Where(c => c.IsActive).ToList();
-            return View(countries);
+            try
+            {
+                HttpResponseMessage response = await client.GetAsync("http://localhost:63322/api/Country");
+                response.EnsureSuccessStatusCode();
+                var responseBody = await response.Content.ReadAsAsync<IList<Country>>();
+                return View(responseBody);
+            }
+            catch (HttpRequestException e)
+            {
+                ViewBag.Error = e.Message;
+                return View("Error");
+            }
+            //var countries = db.Countries.Where(c => c.IsActive).ToList();
+            //return View(countries);
+            
         }
 
         // GET: Countries/Details/5
