@@ -211,6 +211,8 @@
     <Content Include="Views\Cities\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
     <Content Include="Views\Search\Search.cshtml" />
+    <Content Include="Views\People\Api.cshtml" />
+    <Content Include="Views\People\OdataAdvSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

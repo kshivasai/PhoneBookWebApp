@@ -46,17 +46,17 @@ namespace Phone.Service
         public Country DeleteCountries(int id)
         {
 
-            var val = phoneContext.Countries.Single(x => x.CountryId.Equals(id));
-            if(val==null)
+            Country deletecountry = phoneContext.Countries.Single(x => x.CountryId.Equals(id) && x.IsActive);
+            if(deletecountry == null)
             {
                 throw new InvalidOperationException("Record Not Found, It may be removed");
             }
 
-            val.IsActive = false;
+            deletecountry.IsActive = false;
 
             phoneContext.SaveChanges();
 
-            return val;
+            return deletecountry;
 
         }
     }

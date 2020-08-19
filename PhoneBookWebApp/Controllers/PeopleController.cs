@@ -31,9 +31,9 @@ namespace PhoneBookWebApp.Controllers
                                                    p.IsActive);
                 return View(people.ToList());
             }
-            var peoples = db.Peoples.Include(p => p.City).Include(p => p.Country).Include(p => p.State);
-            peoples = peoples.Where(p => p.IsActive);
-            return View(peoples.ToList());
+            var peoples = db.Peoples.Include(p => p.City).Include(p => p.Country).Include(p => p.State).ToList();
+            peoples = peoples.Where(p => p.IsActive).ToList();
+            return View(peoples);
         }
 
         // GET: People/Details/5
@@ -199,6 +199,53 @@ namespace PhoneBookWebApp.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public ActionResult Api()
+        {
+            return View();
+        }
+        public JsonResult GetSearchingData(string searchBy, string searchValue)
+        {
+            List<People> people = new List<People>();
+            if (searchBy == "FirstName")
+            {
+                try
+                {
+                   
+                    people = db.Peoples.Where(p=>p.FirstName.Contains(searchValue) || searchValue==null).ToList();
+                }
+                catch(FormatException)
+                {
+                    Console.WriteLine("Data not found");
+                }
+                return Json(people, JsonRequestBehavior.AllowGet);
+            }
+            else if(searchBy == "LastName")
+            {
+                try
+                {
+                    int id = Convert.ToInt32(searchValue);
+                    people = db.Peoples.Where(p => p.LastName.Contains(searchValue)|| searchValue == null).ToList();
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Data not found");
+                }
+                return Json(people, JsonRequestBehavior.AllowGet);
+            }
+            else
+            {
+                try
+                {
+                    people = db.Peoples.Where(p => p.PhoneNumber.Contains(searchValue) || searchValue == null).ToList();
+                }
+                catch (FormatException)
+                {
+                    Console.WriteLine("Data not found");
+                }
+                return Json(people, JsonRequestBehavior.AllowGet);
+            }
         }
     }
 }

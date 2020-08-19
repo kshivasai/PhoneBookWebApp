@@ -8,12 +8,14 @@ using Phone.DAL;
 using Phone.Service;
 using System.Threading.Tasks;
 using System.Web.Http.Cors;
+using PhoneWebApi.BasicAuth;
 
 
 namespace PhoneWebApi.Controllers
 {
     //[EnableCors(origins: "http://localhost:62155/", headers: "*", methods: "*")]
     [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [BasicAuthentication]
     public class CountryController : ApiController
     {
         CountryService countryService;

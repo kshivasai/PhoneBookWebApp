@@ -8,6 +8,7 @@ using System.Web.Http.OData.Extensions;
 using Microsoft.Owin.Security.OAuth;
 using Newtonsoft.Json.Serialization;
 using Phone.DAL;
+using PhoneWebApi.BasicAuth;
 
 namespace PhoneWebApi
 {
@@ -30,11 +31,26 @@ namespace PhoneWebApi
 
             //Enable cors
             config.EnableCors();
+
+            config.Filters.Add(new BasicAuthentication());
             //Odata
             ODataConventionModelBuilder builder = new ODataConventionModelBuilder();
             builder.EntitySet<Person>("PeopleOData");
-            builder.EntitySet<Address>("Addresses");
+
+           
+
+            
+            builder.EntitySet<Address>("AddressOData");
+            builder.EntitySet<City>("Cities");
+            builder.EntitySet<Country>("Countries");
+
+            builder.EntitySet<State>("States");
             config.Routes.MapODataServiceRoute("odata", "odata", builder.GetEdmModel());
+
+
+
+
+            config.EnableQuerySupport();
 
             config.Routes.MapHttpRoute(
                 name: "DefaultApi",

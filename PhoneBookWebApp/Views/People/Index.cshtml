@@ -19,89 +19,84 @@
 }
 
 <table class="table">
-    <tr>
-        <th>
-            @Html.DisplayNameFor(model => model.City.CityName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Country.CountryName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.State.StateName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.FirstName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.LastName)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PhoneNumber)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.Email)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AddressOne)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.AddressTwo)
-        </th>
-        <th>
-            @Html.DisplayNameFor(model => model.PinCode)
-        </th>
-        <th></th>
-    </tr>
-
-    @foreach (var item in Model)
-    {
-
         <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.City.CityName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Country.CountryName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.State.StateName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.FirstName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.LastName)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PhoneNumber)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Email)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddressOne)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.AddressTwo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.PinCode)
-            </td>
-            <td>
-                @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
-                @Html.ActionLink("Details", "Details", new { id = item.ID }) |
-                @Html.ActionLink("Delete", "Delete", new { id = item.ID })
-            </td>
+            <th>
+                @Html.DisplayNameFor(model => model.City.CityName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Country.CountryName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.State.StateName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LastName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PhoneNumber)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressOne)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AddressTwo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PinCode)
+            </th>
+            <th></th>
         </tr>
-    }
 
-</table>
-@*<div>
+        @foreach (var item in Model)
+        {
 
-    <h2>All countries</h2>
-    <ul id="products" />
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.City.CityName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Country.CountryName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.State.StateName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FirstName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LastName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PhoneNumber)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Email)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressOne)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AddressTwo)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.PinCode)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ID }) |
+                    @Html.ActionLink("Details", "Details", new { id = item.ID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ID })
+                </td>
+            </tr>
+        }
 
-</div>*@
+    </table>
+
 <form id="myForm">
     <label for="CountriesDropdown"><b>All Countries</b></label>
     <select class="form-control" id="CountriesDropDown" name="CountriesDropDown"></select>
@@ -135,7 +130,7 @@
 
     });*@
 
-    @*//function formatItem(item) {
+@*//function formatItem(item) {
 
     //   return item.Name + ': $' + item.Price;
 
@@ -169,8 +164,8 @@
             url: "http://localhost:63322/api/Country",
             data: "{}",
             success: function (data) {
-                var s = '<option value="-1">Please Select a Country</option>';
-                for (var i = 0; i < data.length; i++) {
+                var s = '<option value="0">Please Select a Country</option>';
+                for (var i = 1; i < data.length; i++) {
                     s += '<option value="' + data[i].CountryId + '">' + data[i].CountryName + '</option>';
                 }
                 $("#CountriesDropDown").html(s);
@@ -178,3 +173,7 @@
         });
     });
 </script>
+
+
+
+

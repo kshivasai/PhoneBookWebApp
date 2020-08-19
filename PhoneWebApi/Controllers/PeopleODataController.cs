@@ -13,9 +13,13 @@ using System.Web.Http.OData.Routing;
 using Phone.DAL;
 using System.Web.Http.OData.Builder;
 using System.Web.Http.OData.Extensions;
+using System.Web.Http.Cors;
+using PhoneWebApi.BasicAuth;
 
 namespace PhoneWebApi.Controllers
 {
+    [EnableCors(origins: "*", headers: "*", methods: "*")]
+    [BasicAuthentication]
     /*
     The WebApiConfig class may require additional changes to add a route for this controller. Merge these statements into the Register method of the WebApiConfig class as applicable. Note that OData URLs are case sensitive.
 

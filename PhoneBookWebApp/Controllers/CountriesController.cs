@@ -16,24 +16,26 @@ namespace PhoneBookWebApp.Controllers
     public class CountriesController : Controller
     {
         private PhoneBookContext db = new PhoneBookContext();
-        static readonly HttpClient client = new HttpClient();
+        //static readonly HttpClient client = new HttpClient();
         // GET: Countries
-        public async Task<ActionResult> Index()
+        //public async Task<ActionResult> Index()
+        public ActionResult Index()
         {
-            try
-            {
-                HttpResponseMessage response = await client.GetAsync("http://localhost:63322/api/Country");
-                response.EnsureSuccessStatusCode();
-                var responseBody = await response.Content.ReadAsAsync<IList<Country>>();
-                return View(responseBody);
-            }
-            catch (HttpRequestException e)
-            {
-                ViewBag.Error = e.Message;
-                return View("Error");
-            }
+            //try
+            //{
+            //    HttpResponseMessage response = await client.GetAsync("http://localhost:63322/api/Country");
+            //    response.EnsureSuccessStatusCode();
+            //    var responseBody = await response.Content.ReadAsAsync<IList<Country>>();
+            //    return View(responseBody);
+            //}
+            //catch (HttpRequestException e)
+            //{
+            //    ViewBag.Error = e.Message;
+            //    return View("Error");
+            //}
             //var countries = db.Countries.Where(c => c.IsActive).ToList();
             //return View(countries);
+            return View();
             
         }
 
